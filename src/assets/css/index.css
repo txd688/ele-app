@@ -46,3 +46,25 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+/* 公有样式 */
+.flex-container{
+	display: flex;
+}
+.flex-center{
+	justify-content: center;
+}
+/* 单行超出出现省略号 */
+.overOmitLine{
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+}
+.flex-align-center{
+	align-content: center;
+	align-items: center;
+}
+.box-padding{
+	padding: 15px 10px;
+	background-color: #ffffff;
+}

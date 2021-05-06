@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <img src="../assets/images/logo.jpg" alt=""/>
+    <img src="@/assets/images/logo.jpg" alt=""/>
     <inputGroup 
       v-model="phone"
       type="number"
@@ -13,7 +13,7 @@
     />
     <inputGroup 
       type="number"
-      :value="verificatyCode" 
+      v-model="verificatyCode" 
       placeholder="请输入验证码" 
       name="verificatyCode" 
       :disabled="disabled" 
@@ -23,21 +23,21 @@
       新用户登录时即自动注册，表示已同意<span>《用户服务协议》</span>
     </div>
     <div class="button">
-      <button>登录</button>
+      <button :disabled="isClick" @click="login">登录</button>
     </div>
   </div>
 </template>
 <script>
-import inputGroup from "../components/InputGroup"
+import inputGroup from "@/components/InputGroup"
 export default {
   name:'login',
   data() {
     return {
-      phone:'',
+      phone:null,
       btnTitle:'获取验证码',
-      verificatyCode:'',
+      verificatyCode:null,
       disabled:false,
-      error:{}
+      error:{},
     };
   },
   methods: {
@@ -45,8 +45,10 @@ export default {
       if(this.isPhone()){
         this.codeDown();
         //发送请求
-        this.$axios.post('').then(()=>{
-
+        this.$axios.post('/apis/api/posts/sms_send',{
+          phone: '17610351502'
+        }).then((res)=>{
+          console.log(res)
         });
       }
     },
@@ -82,7 +84,33 @@ export default {
           this.btnTitle = time + '秒重试';
         }
       },1000);
+    },
+    login(){
+      this.error = {};
+      //发送登录请求
+      this.$axios.post("/apis/api/posts/sms_back",{
+        // phone: this.phone,
+        phone: '17610351502',
+        code: this.verificatyCode
+      }).then(res=>{
+        console.log(res);
+        localStorage.setItem("ele_login",true);
+        this.$router.push("/");
+      }).catch(err=>{
+        this.error = {
+          verificatyCode:err.response.data.msg
+        }
+      })
     }
+  },
+  computed:{
+   isClick(){
+     if(!this.phone || !this.verificatyCode){
+       return true;
+     }else{
+       return false;
+     }
+   }
   },
   mounted() {},
   components: {
@@ -116,12 +144,16 @@ export default {
       font-weight: bold;
       width: 100%;
       border:none;
-      background: red;
+      background: #1989fa;
       line-height: 34px;
       color: #fff;
       border-radius: 3px;
       outline: none;
+      &:disabled{
+       background: #5daeff;
+      }
     }
+    
   }
 }
 </style>

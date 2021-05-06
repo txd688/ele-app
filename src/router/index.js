@@ -10,13 +10,48 @@ const routes = [
   },
   {
     path: '/index',
-    name: 'index',
-    component: () => import('../views/Index.vue')
+    component: () => import('../views/enter/Index.vue'),
+    children: [
+      {
+        path: '',
+        redirect:'/home'
+      },
+      {
+        path: "/home",
+        name: "home",
+        component:()=>import("@/views/enter/Home.vue")
+      },
+      {
+        path: "/order",
+        name: "order",
+        component:()=>import("@/views/enter/Order.vue")
+      },
+      {
+        path: "/me",
+        name: "me",
+        component:()=>import("@/views/enter/Me.vue")
+      },
+      {
+        path: "/address",
+        name: "address",
+        component:()=>import("@/views/enter/Address.vue")
+      },
+      {
+        path: "/city",
+        name: "city",
+        component:()=>import("@/views/enter/City.vue")
+      },
+      {
+        path: "/shop",
+        name: "shop",
+        component:()=>import("@/views/shops/Shop.vue")
+      },
+    ]
   },
   {
     path: '/login',
     name: 'login',
-    component: () => import('../views/Login.vue')
+    component: () => import('../views/user/Login.vue')
   },
 ];
 const router = new VueRouter({
