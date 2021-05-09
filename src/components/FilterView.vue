@@ -1,6 +1,6 @@
 <template>
   <div class="filter_wrap" v-if="filterData">
-    <van-overlay :show="show" @click="isShow(false)" :z-index="10"/>
+    <van-overlay :show="show || isScreen" @click="hide()" :z-index="10"/>
     <aside class="filter flex-container" :class="{'isShow':show}">
       <div 
         v-for="(item,index) in filterData.navTab" 
@@ -30,7 +30,27 @@
         </li>
       </ul>
     </div>
-    
+    <!-- 筛选 -->
+    <div v-if="isScreen" class="filterSort screen">
+      <div class="filter-sort">
+        <div v-for="(screen,index) in filterData.screenBy" :key="index">
+          <div class="title">{{screen.title}}</div>
+          <ul class="flex-container">
+            <li v-for="(item,i) in screen.data" :key="i" class="flex-container">
+              <div class="flex-container flex-align-center" :class="{'selected':item.select}" @click="selectScreen(item,screen)">
+                <img v-if="item.icon" :src="item.icon" alt=""/>
+                <span>{{item.name}}</span>
+              </div>
+              
+            </li>
+          </ul>
+        </div>
+        <div class="buttons">
+          <button :class="{'edit':edit}" @click="clearSelect">清空</button>
+          <button @click="filterOk">确定</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -43,7 +63,8 @@ export default{
     return {
       currentFilter:0,
       show:false,
-      sort:0
+      sort:0,
+      isScreen:false
     }
   },
   methods:{
@@ -51,30 +72,92 @@ export default{
       this.currentFilter = index;
       switch(index){
         case 0:
-          this.isShow(true);
+          this.show = true;
+          this.emitShow();
           break;
         case 1:
         case 2:
           this.$emit("updateData",{
             condation:this.filterData.navTab[index].condition
           });
-          this.isShow(false);
+          this.hide();
+          break;
+        case 3:
+          this.isScreen = true;
+          this.emitShow();
           break;
         default:
-          this.isShow(false);
+          this.hide();
           break;
       }
     },
-    isShow(b){
-      this.show = b;
-      this.$emit("filterShow",b);
+    hide(){
+      this.isScreen = false;
+      this.show = false;
+      this.$emit("filterShow",false);
+    },
+    emitShow(){
+      this.$emit("filterShow",true);
     },
     clickSort(index,item){
       this.sort = index;
       this.filterData.navTab[0].name = this.filterData.sortBy[index].name;
-      this.isShow(false);
+      this.hide();
       //更新数据
       this.$emit("updateData",{condation:item.code});
+    },
+    selectScreen(item,screen){
+      if(screen.id !="MPI"){
+        //单选
+        screen.data.forEach(ele=>{
+          ele.select = false;
+        });
+      }
+      item.select = !item.select;
+    },
+    clearSelect(){
+      this.filterData.screenBy.forEach(screen=>{
+        screen.data.forEach(item=>{
+          item.select = false;
+        })
+      })
+    },
+    filterOk(){
+      let mpiStr = "";
+      let screenData = {
+        MPI:"",
+        offer:"",
+        per:""
+      }
+      this.filterData.screenBy.forEach(e=>{
+        e.data.forEach((item)=>{
+          if(item.select){
+            //两种情况 单选 多选
+            if(e.id !== "MPI"){
+              //单选
+              screenData[e.id] = item.code;
+            }else{
+              mpiStr += item.code + ',';
+              screenData[e.id] = mpiStr;
+            }
+          }
+        });
+      });
+      this.$emit("updateData",{condation:screenData});
+      this.hide();
+    }
+  },
+  computed:{
+    edit(){
+      let edit = false;
+      this.filterData.screenBy.forEach(e=>{
+        e.data.forEach(item=>{
+          if(item.select){
+            edit = true;
+          }
+        })
+      });
+      return edit;
     }
   }
 }
@@ -93,7 +176,7 @@ export default{
       text-align: center;
     }
   }
-  .filterSort{
+  .filterSort,.screen{
     background: white;
     z-index: 1000;
     position: fixed;
@@ -101,12 +184,62 @@ export default{
     color: #333;
     font-size: 14px;
     line-height: 40px;
-    padding:0 20px 0 10px;
+    padding:0 20px;
     width:100%;
     box-sizing: border-box;
     li{
-      width: 100%;
+      margin-bottom: 8px;
       justify-content: space-between;
+    }
+
+  }
+  .screen{
+    top:49px;
+    padding-bottom: 50px;
+    padding:10px 10px 50px 10px;
+    .title{
+      margin-bottom: 10px;
+    }
+    ul{
+      flex-wrap: wrap;
+      li{
+        width:30%;
+        margin-bottom: 8px;
+        justify-content: center;
+        div{
+          width: 90%;
+          background: rgb(245, 243, 243);
+          white-space: nowrap;
+          justify-content: center;
+          span{
+            line-height: 35px;
+          }
+        }
+      }
+    }
+    img{
+      width: 15px;
+      height: 15px;
+      padding-right: 5px;
+    }  
+    .buttons{
+      border-top: 1px rgb(228, 228, 228) solid;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      &>button:first-child{
+        background: none;
+        color: #ccc;
+      }
+      &>button:last-child{
+        background: #07c160;
+        color: white;
+      }
+      button{
+        width: 50%;
+        border: 0;
+      }
     }
   }
 }
@@ -124,5 +257,12 @@ export default{
 }
 .blue{
   color:#1989fa!important;
+}
+.selected{
+  background: #e0ebf7!important;
+  color: #1989fa!important;
+}
+.edit{
+  color: #333!important;
 }
 </style>
