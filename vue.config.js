@@ -21,6 +21,15 @@ module.exports = {
     .loader('svg-sprite-loader')
     .options({symbolId: 'icon-[name]'}).end();
   },
+  // 全局引入 vant less 配置
+  pluginOptions: {
+    'style-resources-loader': {
+      preProcessor: 'less',
+      patterns: [
+        path.resolve(__dirname, './src/assets/Css/var.less')
+      ]
+    }
+  },
    devServer: {
     port: 8777,
     proxy: {

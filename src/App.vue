@@ -3,7 +3,6 @@
     <van-overlay :show="LOADING" class="flex-container cent">
       <van-loading type="spinner" />
     </van-overlay>
-
     <router-view/>
   </div>
 </template>

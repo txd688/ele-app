@@ -3,14 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import axios from "axios"
-import Vant from 'vant';
-import 'vant/lib/index.css';
-import '@/assets/css/index.css';
-import '@/icon';
-Vue.config.productionTip = false
-Vue.prototype.$axios = axios;
 
-Vue.use(Vant);
+import '@/core/lazy_use';
 
 //请求拦截
 axios.interceptors.request.use(config=>{
@@ -29,6 +23,9 @@ axios.interceptors.response.use(response=>{
   store.commit('hideLoading')
   return Promise.reject(error);
 });
+
+Vue.config.productionTip = false
+Vue.prototype.$axios = axios;
 
 new Vue({
   router,

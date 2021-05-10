@@ -14,7 +14,6 @@
         background="none"
         style="padding:10px 0 0 0;"
         left-icon=""
-        
       />
     </div>
     <!-- 轮播 -->
