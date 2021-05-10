@@ -35,26 +35,34 @@
       </van-swipe-item>
     </van-swipe>
     <!-- 商品列表 -->
-    <div>
+    <template>
       <div class="shopTitle box-padding">—— <span>推荐商家</span> ——</div>
       <FilterView :filterData="filterData" @filterShow="filterShow" @updateData="updateData"/>
-    </div>
-    
+    </template>
+    <!-- 商家信息 -->
+    <template>
+      <IndexShop v-for="(item,index) in restaurants" :key="index" :restaurant="item.restaurant"/>
+    </template>
   </div>
 </template>
 <script>
 import FilterView from "@/components/FilterView"
+import IndexShop from "@/components/IndexShop"
 export default{
   name:'Home',
   components:{
-    FilterView
+    FilterView,
+    IndexShop
   },
   data(){
     return {
       bannerImage:[],
       entries:[],
       filterData:null,
-      isShow:false
+      isShow:false,
+      page:1,
+      size:5,
+      restaurants:[]
     }
   },
   computed:{
@@ -72,8 +80,13 @@ export default{
         this.entries = res.data.entries;
       });
       this.$axios.get("/api2/api/profile/filter").then(res=>{
-        console.log(res.data)
+        // console.log(res.data)
         this.filterData = res.data;
+      });
+      //拉取商家信息
+      this.$axios.post(`/api2/api/profile/restaurants/1/5`).then(res=>{
+        this.restaurants = res.data;
+        console.log(this.restaurants)
       });
     },
     filterShow(n){
@@ -90,6 +103,9 @@ export default{
 </script>
 <style scoped lang="less">
 .home{
+  height: 100%;
+  width: 100%;
+  overflow-x: scroll;
   .dvTop{
     background: #1989fa;
     padding:15px;

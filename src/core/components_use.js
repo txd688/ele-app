@@ -7,6 +7,7 @@
  */
  import Vue from 'vue'
  import {
+   Rate,
    Button,
    Cell,
    CellGroup,
@@ -53,7 +54,7 @@
    List,
    Overlay 
  } from 'vant'
- 
+ Vue.use(Rate)
  Vue.use(Overlay)
  Vue.use(Button)
  Vue.use(Cell)
