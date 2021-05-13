@@ -164,13 +164,19 @@ export default{
 </script>
 <style scoped lang="less">
 .filter_wrap{
+  position: sticky;
+  z-index: 10;
+  top: 58px;
+  background: white;
   .filter{
-    position: relative;
+    position:static;
     background: white;
+    top: 59px;
+    width: 100%;
     height: 40px;
     line-height: 40px;
     font-size: 14px;
-    z-index: 1000;
+    z-index: 10;
     &>div{
       flex:auto;
       text-align: center;
@@ -178,7 +184,7 @@ export default{
   }
   .filterSort,.screen{
     background: white;
-    z-index: 1000;
+    z-index: 10;
     position: fixed;
     top: 99px;
     color: #333;
@@ -252,9 +258,13 @@ export default{
 }
 .isShow{
   position: fixed!important;
-  width: 100%;
-  top: 59px;
+  z-index: 999;
 }
+// .sticky{
+//   position: sticky!important;
+//   width: 100%;
+//   top: 59px;
+// }
 .blue{
   color:#1989fa!important;
 }

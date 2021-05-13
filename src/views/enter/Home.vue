@@ -7,7 +7,7 @@
         <van-col span="2"><van-icon style="transform:rotate(90deg)" name="play" /></van-col>
       </van-row>
     </div>
-    <div class="dvTop" style="padding-top:0" :class="{'isShow':isShow}">
+    <div class="dvTop sticky" :class="{'isShow':isShow}">
        <van-search
         placeholder="搜索商家 商家名称"
         input-align="center"
@@ -41,7 +41,16 @@
     </template>
     <!-- 商家信息 -->
     <template>
-      <IndexShop v-for="(item,index) in restaurants" :key="index" :restaurant="item.restaurant"/>
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="getShopMessageData"
+        :error.sync="error"
+        error-text="请求失败，点击重新加载"
+      >
+        <IndexShop v-for="(item,index) in restaurants" :key="index" :restaurant="item.restaurant"/>
+      </van-list>
     </template>
   </div>
 </template>
@@ -62,7 +71,10 @@ export default{
       isShow:false,
       page:1,
       size:5,
-      restaurants:[]
+      restaurants:[],
+      loading: false,
+      finished: false,
+      error:false
     }
   },
   computed:{
@@ -83,10 +95,21 @@ export default{
         // console.log(res.data)
         this.filterData = res.data;
       });
-      //拉取商家信息
-      this.$axios.post(`/api2/api/profile/restaurants/1/5`).then(res=>{
-        this.restaurants = res.data;
-        console.log(this.restaurants)
+      //this.getShopMessageData();
+    },
+    getShopMessageData(){
+       //拉取商家信息
+      this.$axios.post(`/api2/api/profile/restaurants/${this.page}/${this.size}`).then(res=>{
+        this.page++;
+        this.restaurants = [...this.restaurants,...res.data];
+        this.loading = false;
+        if(res.data.length < this.size){
+          this.finished = true;
+        }
+        console.log(this.restaurants);
+      },()=>{
+        this.error = true;
+        this.loading = false;
       });
     },
     filterShow(n){
@@ -94,7 +117,7 @@ export default{
     },
     updateData(condation){
       console.log(condation)
-    }
+    },
   },
   created(){
     this.getData();
@@ -112,6 +135,7 @@ export default{
     color: #ffffff;
     font-weight: bold;
     font-size: 16px;
+    box-sizing: border-box;
   }
   .my-swipe{
     img{
@@ -125,16 +149,21 @@ export default{
     display: flex;
     justify-content: center;
     padding-top: 25px;
+    box-sizing: border-box;
     span{
       padding: 0 20px;
     }
   }
   .isShow{
-    z-index: 999;
-    position: fixed;
-    top: 0;
+    position: fixed!important;
+    z-index: 999!important;
+  }
+  .sticky{
+    padding-top:0!important;
+    position: sticky;
+    z-index: 10;
     width:100%;
-    box-sizing: border-box;
+    top: 0;
   }
 }
 </style>

@@ -34,7 +34,7 @@ module.exports = {
     port: 8777,
     proxy: {
       '/apis': {
-        target: 'https://eleme1-october.herokuapp.com/',
+        target: 'https://c.iwanmen.com/element/',
         changeOrigin: true,
         ws: false,
         pathRewrite: {
@@ -42,7 +42,7 @@ module.exports = {
         }
       },
       '/api2': {
-        target: 'https://eleme2-october.herokuapp.com/',
+        target: 'https://c.iwanmen.com/element/',
         changeOrigin: true,
         ws: false,
         pathRewrite: {

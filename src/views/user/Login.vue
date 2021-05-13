@@ -46,7 +46,8 @@ export default {
         this.codeDown();
         //发送请求
         this.$axios.post('/apis/api/posts/sms_send',{
-          phone: '17610351502'
+          // phone: '17610351502'
+          phone:this.phone
         }).then((res)=>{
           console.log(res)
         });
@@ -89,8 +90,8 @@ export default {
       this.error = {};
       //发送登录请求
       this.$axios.post("/apis/api/posts/sms_back",{
-        // phone: this.phone,
-        phone: '17610351502',
+        phone: this.phone,
+        // phone: '17610351502',
         code: this.verificatyCode
       }).then(res=>{
         console.log(res);
