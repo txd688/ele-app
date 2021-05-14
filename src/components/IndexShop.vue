@@ -70,6 +70,7 @@ export default{
     }
   }
   .box-right{
+    flex: 1;
     &>div:first-child{
       i{
         background: #ffd21e;

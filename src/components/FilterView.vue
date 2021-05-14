@@ -119,8 +119,8 @@ export default{
       this.filterData.screenBy.forEach(screen=>{
         screen.data.forEach(item=>{
           item.select = false;
-        })
-      })
+        });
+      });
     },
     filterOk(){
       let mpiStr = "";

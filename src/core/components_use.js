@@ -52,8 +52,10 @@
    CollapseItem,
    ShareSheet,
    List,
-   Overlay 
+   Overlay,
+   PullRefresh 
  } from 'vant'
+ Vue.use(PullRefresh )
  Vue.use(Rate)
  Vue.use(Overlay)
  Vue.use(Button)

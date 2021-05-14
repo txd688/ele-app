@@ -100,5 +100,6 @@ export default {
 .cent{
   justify-content: center;
   align-items: center;
+  z-index: 100000;
 }
 </style>

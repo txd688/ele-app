@@ -41,16 +41,18 @@
     </template>
     <!-- 商家信息 -->
     <template>
-      <van-list
-        v-model="loading"
-        :finished="finished"
-        finished-text="没有更多了"
-        @load="getShopMessageData"
-        :error.sync="error"
-        error-text="请求失败，点击重新加载"
-      >
-        <IndexShop v-for="(item,index) in restaurants" :key="index" :restaurant="item.restaurant"/>
-      </van-list>
+      <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="getShopMessageData"
+          :error.sync="error"
+          error-text="请求失败，点击重新加载"
+        >
+          <IndexShop v-for="(item,index) in restaurants" :key="index" :restaurant="item.restaurant"/>
+        </van-list>
+      </van-pull-refresh>
     </template>
   </div>
 </template>
@@ -74,7 +76,8 @@ export default{
       restaurants:[],
       loading: false,
       finished: false,
-      error:false
+      error:false,
+      isLoading:false
     }
   },
   computed:{
@@ -99,21 +102,32 @@ export default{
     },
     getShopMessageData(){
        //拉取商家信息
-      this.$axios.post(`/api2/api/profile/restaurants/${this.page}/${this.size}`).then(res=>{
-        this.page++;
-        this.restaurants = [...this.restaurants,...res.data];
-        this.loading = false;
-        if(res.data.length < this.size){
-          this.finished = true;
-        }
-        console.log(this.restaurants);
-      },()=>{
-        this.error = true;
-        this.loading = false;
+      return new Promise((resolve, reject)=>{
+        this.$axios.post(`/api2/api/profile/restaurants/${this.page}/${this.size}`).then(res=>{
+          this.page++;
+          this.restaurants = [...this.restaurants,...res.data];
+          this.loading = false;
+          if(res.data.length < this.size){
+            this.finished = true;
+          }
+          resolve(res.data);
+        },()=>{
+          this.error = true;
+          this.loading = false;
+          reject();
+        });
       });
     },
     filterShow(n){
       this.isShow = n;
+    },
+    onRefresh(){
+      this.page = 1;
+      this.finished = false;
+      this.getShopMessageData().then((res)=>{
+        this.restaurants = res;
+        this.isLoading = false;
+      });
     },
     updateData(condation){
       console.log(condation)
