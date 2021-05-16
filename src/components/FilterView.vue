@@ -77,9 +77,7 @@ export default{
           break;
         case 1:
         case 2:
-          this.$emit("updateData",{
-            condation:this.filterData.navTab[index].condition
-          });
+          this.updateData(this.filterData.navTab[index].condition);
           this.hide();
           break;
         case 3:
@@ -104,7 +102,7 @@ export default{
       this.filterData.navTab[0].name = this.filterData.sortBy[index].name;
       this.hide();
       //更新数据
-      this.$emit("updateData",{condation:item.code});
+      this.screenData(item.code);
     },
     selectScreen(item,screen){
       if(screen.id !="MPI"){
@@ -143,8 +141,12 @@ export default{
           }
         });
       });
-      this.$emit("updateData",{condation:screenData});
+      this.updateData(screenData);
       this.hide();
+    },
+    //给父组件传递信息
+    updateData(obj){
+      this.$emit("updateData",{condition:obj});
     }
   },
   computed:{
@@ -260,11 +262,7 @@ export default{
   position: fixed!important;
   z-index: 999;
 }
-// .sticky{
-//   position: sticky!important;
-//   width: 100%;
-//   top: 59px;
-// }
+
 .blue{
   color:#1989fa!important;
 }

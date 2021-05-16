@@ -34,7 +34,7 @@
           <span>配送费￥{{restaurant.float_delivery_fee}}</span>
         </div>
         <div>
-          <span>1km</span>
+          <span>{{ (restaurant.distance / 1000).toFixed(2) }}km</span>
           |
           <span>{{restaurant.order_lead_time}}分钟</span>
         </div>

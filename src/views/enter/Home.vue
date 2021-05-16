@@ -7,7 +7,7 @@
         <van-col span="2"><van-icon style="transform:rotate(90deg)" name="play" /></van-col>
       </van-row>
     </div>
-    <div class="dvTop sticky" :class="{'isShow':isShow}">
+    <div class="dvTop sticky" :class="{'isShow':isShow}" @click="$router.push('/search')">
        <van-search
         placeholder="搜索商家 商家名称"
         input-align="center"
@@ -77,7 +77,8 @@ export default{
       loading: false,
       finished: false,
       error:false,
-      isLoading:false
+      isLoading:false,
+      data:null,//
     }
   },
   computed:{
@@ -103,7 +104,7 @@ export default{
     getShopMessageData(){
        //拉取商家信息
       return new Promise((resolve, reject)=>{
-        this.$axios.post(`/api2/api/profile/restaurants/${this.page}/${this.size}`).then(res=>{
+        this.$axios.post(`/api2/api/profile/restaurants/${this.page}/${this.size}`,this.data).then(res=>{
           this.page++;
           this.restaurants = [...this.restaurants,...res.data];
           this.loading = false;
@@ -121,6 +122,7 @@ export default{
     filterShow(n){
       this.isShow = n;
     },
+    //上拉刷新，重置数据
     onRefresh(){
       this.page = 1;
       this.finished = false;
@@ -130,7 +132,9 @@ export default{
       });
     },
     updateData(condation){
-      console.log(condation)
+      // console.log(condation)
+      this.data = condation;
+      this.onRefresh();
     },
   },
   created(){
