@@ -1,5 +1,5 @@
 <template>
-  <div class="filter_wrap" v-if="filterData">
+  <div class="filter_wrap" v-if="filterData" :style="style">
     <van-overlay :show="show || isScreen" @click="hide()" :z-index="10"/>
     <aside class="filter flex-container" :class="{'isShow':show}">
       <div 
@@ -57,7 +57,8 @@
 export default{
   name:'FilterView',
   props:{
-    filterData:Object
+    filterData:Object,
+    style:Object
   },
   data(){
     return {

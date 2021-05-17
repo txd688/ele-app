@@ -25,12 +25,12 @@
         <searchIndex :data="result.words" @click="clickList"/>
       </div>
     </div>
-    <div class="container" v-if="showShop">
+    <div  v-if="showShop" style="overflow: hidden;height:calc(100% - 90px)">
       <template>
-        <FilterView :filterData="filterData"  @updateData="updateData"/>
+        <FilterView :filterData="filterData"  @updateData="updateData" :style="{'top':0}"/>
       </template>
       <!-- 商家信息 -->
-      <template>
+      <div class="container">
         <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
           <van-list
             v-model="loading"
@@ -43,7 +43,7 @@
             <IndexShop v-for="(item,index) in restaurants" :key="index" :restaurant="item.restaurant"/>
           </van-list>
         </van-pull-refresh>
-      </template>
+      </div>
     </div>
   </div>
 </template>
@@ -74,7 +74,7 @@ export default{
       finished: false,
       error:false,
       page:1,
-      size:4,
+      size:5,
     }
   },
   created(){
@@ -116,6 +116,7 @@ export default{
       });
     },
     getShopMessageData(){
+      // alert(123)
        //拉取商家信息
       return new Promise((resolve, reject)=>{
         this.$axios.post(`/api2/api/profile/restaurants/${this.page}/${this.size}`,this.data).then(res=>{
@@ -167,7 +168,8 @@ export default{
     color: rgb(163, 163, 163);
   }
   .container{
-
+    height: calc(100% - 48px);
+    overflow-x: scroll;
   }
 }
 </style>

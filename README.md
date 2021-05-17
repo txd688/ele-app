@@ -33,7 +33,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ### 使用框架
 
 ui框架：vant
-* svg: svg-sprite-loader config也要配置
+* svg: svg-sprite-loader config文件也要配置
 * 滚动：cnpm i better-scroll -S
 * svg包装 npm install svg-sprite-loader -D
 * 本地存储 npm install vue-ls --save
