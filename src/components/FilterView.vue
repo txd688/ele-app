@@ -58,7 +58,12 @@ export default{
   name:'FilterView',
   props:{
     filterData:Object,
-    style:Object
+    style:{
+      type:Object,
+      default:()=>{
+        return {}
+      }
+    }
   },
   data(){
     return {

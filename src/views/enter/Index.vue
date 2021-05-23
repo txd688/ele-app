@@ -24,7 +24,6 @@ export default{
 </script>
 <style scoped lang="less">
 .index{
-  background: #eeeeee;
   height: calc(100% - 45px);//切结"+或-"两边要有空格 不然不生效
   width: 100%;
 }

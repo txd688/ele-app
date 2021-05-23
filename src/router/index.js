@@ -40,23 +40,40 @@ const routes = [
         path: "/city",
         name: "city",
         component:()=>import("@/views/enter/City.vue")
-      },
-      {
-        path: "/shop",
-        name: "shop",
-        component:()=>import("@/views/shops/Shop.vue")
-      },
-      {
-        path: "/search",
-        name: "search",
-        component:()=>import("@/views/enter/Search.vue")
-      },
+      },     
     ]
   },
   {
     path: '/login',
     name: 'login',
     component: () => import('../views/user/Login.vue')
+  },
+  {
+    path: "/search",
+    name: "search",
+    component:()=>import("@/views/enter/Search.vue")
+  },
+  {
+    path: "/shop",
+    redirect:'/goods',
+    component:()=>import("@/views/shops/Shop.vue"),
+    children:[
+      {
+        path: "/goods",
+        name: "goods",
+        component:()=>import("@/views/shops/Goods.vue")
+      },   
+      {
+        path: "/comments",
+        name: "comments",
+        component:()=>import("@/views/shops/Comments.vue")
+      },   
+      {
+        path: "/seller",
+        name: "seller",
+        component:()=>import("@/views/shops/Seller.vue")
+      },   
+    ]
   },
 ];
 const router = new VueRouter({

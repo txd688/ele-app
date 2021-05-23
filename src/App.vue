@@ -96,10 +96,7 @@ export default {
   width: 100%;
   height: 100%;
   font-size: 14px;
+  background: #eeeeee;
 }
-.cent{
-  justify-content: center;
-  align-items: center;
-  z-index: 100000;
-}
+
 </style>

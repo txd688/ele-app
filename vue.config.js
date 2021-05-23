@@ -8,6 +8,7 @@ module.exports = {
    // 输出文件目录
    outputDir: 'ele-app',
    assetsDir: 'Public',
+  //  linkActiveClass:'',
    chainWebpack(config){
       // 1.让svgloader排除掉src/icons这个目录
     config.module.rule('svg')
