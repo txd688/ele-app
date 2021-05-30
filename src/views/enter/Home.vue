@@ -91,11 +91,11 @@ export default{
   },
   methods:{
     getData(){
-      this.$axios.get("/api2/api/profile/shopping").then(res=>{
+      this.$axios.get("/apis/api/profile/shopping").then(res=>{
         this.bannerImage = res.data.swipeImgs;
         this.entries = res.data.entries;
       });
-      this.$axios.get("/api2/api/profile/filter").then(res=>{
+      this.$axios.get("/apis/api/profile/filter").then(res=>{
         // console.log(res.data)
         this.filterData = res.data;
       });
@@ -104,7 +104,7 @@ export default{
     getShopMessageData(){
        //拉取商家信息
       return new Promise((resolve, reject)=>{
-        this.$axios.post(`/api2/api/profile/restaurants/${this.page}/${this.size}`,this.data).then(res=>{
+        this.$axios.post(`/apis/api/profile/restaurants/${this.page}/${this.size}`,this.data).then(res=>{
           this.page++;
           this.restaurants = [...this.restaurants,...res.data];
           this.loading = false;

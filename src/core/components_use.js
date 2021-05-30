@@ -53,9 +53,17 @@
    ShareSheet,
    List,
    Overlay,
-   PullRefresh 
+   PullRefresh,
+   Sidebar, 
+   SidebarItem,
+   Sticky,
+   Badge 
  } from 'vant'
- Vue.use(PullRefresh )
+ Vue.use(Badge)
+ Vue.use(Sticky)
+ Vue.use(Sidebar)
+ Vue.use(SidebarItem)
+ Vue.use(PullRefresh)
  Vue.use(Rate)
  Vue.use(Overlay)
  Vue.use(Button)

@@ -9,7 +9,6 @@
         <img :src="shopInfo.rst.image_path" alt="" />
       </div>
     </nav>
-    <div class="dvMain">
       <div class="title"><div class="overOmitLine" @click="showModal=true">{{shopInfo.rst.name}}</div><van-icon name="play" class="icon"/></div>
       <div class="order">
         <span>评分{{shopInfo.rst.rating}}</span>
@@ -18,13 +17,14 @@
       </div>
       <Activity :data="shopInfo.rst.activities"/>
       <div class="notice">公告：{{shopInfo.rst.promotion_info}}</div>
-      <van-tabs :active="activeName" @click="childPage" sticky>
-        <van-tab title="点餐" name="goods"></van-tab>
-        <van-tab title="评价" name="comments"></van-tab>
-        <van-tab title="商家" name="seller"></van-tab>
-      </van-tabs>
+      <van-sticky :offset-top="0">
+        <van-tabs :active="activeName" @click="childPage">
+          <van-tab title="点餐" name="goods"></van-tab>
+          <van-tab title="评价" name="comments"></van-tab>
+          <van-tab title="商家" name="seller"></van-tab>
+        </van-tabs>
+      </van-sticky>
       <router-view/>
-    </div>
    
     <!-- 弹窗 -->
     <InfoModal :data="shopInfo.rst" :showModal="showModal" @hideModal="hideModal"/>
@@ -69,6 +69,8 @@ export default{
 </script>
 <style scoped lang="less">
 .shop{
+  overflow-x: scroll;
+  height: calc(100% - 50px);
   background: white;
   .header{
     position: relative;
@@ -95,34 +97,32 @@ export default{
       }
     }
   }
-  .dvMain{
-    .title{
-      font-size: 18px;
-      font-weight: bold;
-      width: 70%;
-      margin: 0 auto;
-      padding: 35px 0 10px 0;
-      position: relative;
-      display: flex;
-      &>div{
-        width: 90%;
-      }
-      .icon{
-        position: absolute;
-        right: 0;
-      }
+  .title{
+    font-size: 18px;
+    font-weight: bold;
+    width: 70%;
+    margin: 0 auto;
+    padding: 35px 0 10px 0;
+    position: relative;
+    display: flex;
+    &>div{
+      width: 90%;
     }
-    .order,.notice{
-      font-size: 12px;
-      color: #666;
-      text-align: center;
-      line-height: 20px;
+    .icon{
+      position: absolute;
+      right: 0;
     }
-    .notice{
-      padding:0 40px;
-      text-align: left;
-      margin-bottom: 10px;
-    }
+  }
+  .order,.notice{
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+    line-height: 20px;
+  }
+  .notice{
+    padding:0 40px;
+    text-align: left;
+    margin-bottom: 10px;
   }
 }
 </style>

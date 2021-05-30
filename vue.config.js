@@ -35,7 +35,8 @@ module.exports = {
     port: 8777,
     proxy: {
       '/apis': {
-        target: 'https://c.iwanmen.com/element/',
+        // target: 'https://c.iwanmen.com/element/',
+        target: 'https://eleme4-2021.herokuapp.com/',
         changeOrigin: true,
         ws: false,
         pathRewrite: {

@@ -27,7 +27,7 @@
     </div>
     <div  v-if="showShop" style="overflow: hidden;height:calc(100% - 90px)">
       <template>
-        <FilterView :filterData="filterData"  @updateData="updateData" :style="{'top':0}"/>
+        <FilterView :filterData="filterData"  @updateData="updateData" :myStyle="{'top':0}"/>
       </template>
       <!-- 商家信息 -->
       <div class="container">
@@ -78,7 +78,7 @@ export default{
     }
   },
   created(){
-    this.$axios.get("/api2/api/profile/filter").then(res=>{
+    this.$axios.get("/apis/api/profile/filter").then(res=>{
       this.filterData = res.data;
     });
   },
@@ -119,7 +119,7 @@ export default{
       // alert(123)
        //拉取商家信息
       return new Promise((resolve, reject)=>{
-        this.$axios.post(`/api2/api/profile/restaurants/${this.page}/${this.size}`,this.data).then(res=>{
+        this.$axios.post(`/apis/api/profile/restaurants/${this.page}/${this.size}`,this.data).then(res=>{
           this.page++;
           this.restaurants = [...this.restaurants,...res.data];
           this.loading = false;
