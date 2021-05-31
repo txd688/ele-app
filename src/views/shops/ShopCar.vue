@@ -1,27 +1,47 @@
 <template>
   <div class="shopCar flex-container" :class="{'isAddFood':isEmpty}">
-    <div class="flex-container">
-      <div class="car">
-        <van-badge :content="totalCount" :show-zero="false">
-          <van-icon name="shopping-cart" />
-        </van-badge>
+    <van-overlay :show="showFoodList && !isEmpty"  z-index="9" @click="showList"/>
+    <transition name="van-fade">
+      <div class="top"  v-if="showFoodList && !isEmpty">
+        <div class="header">
+          <div>已选商品</div>
+          <div @click="clearFoods"><van-icon name="delete-o" />清空</div>
+        </div>
+        <div class="main">
+          <div class="list" v-for="(item,index) in selectFoods" :key="index">
+            <div class="title">{{item.name}}</div>
+            <div class="price">￥{{item.activity.fixed_price}}</div>
+            <div class="add"><CartControll :foods="item"/></div>
+          </div>
+        </div>
       </div>
-      <div class="p">
-        <span v-if="isEmpty">未选购商品</span>
-        <p v-else>￥{{totalPrice.toFixed(2)}}</p>
-        <p>另需配送费{{shopInfo.rst.float_delivery_fee}}元</p>
+    </transition>
+    <div class="bottom">
+      <div class="flex-container">
+        <div class="car" @click="showList">
+          <van-badge :content="totalCount" :show-zero="false">
+            <van-icon name="shopping-cart" />
+          </van-badge>
+        </div>
+        <div class="p" @click="showList">
+          <span v-if="isEmpty">未选购商品</span>
+          <p v-else>￥{{totalPrice.toFixed(2)}}</p>
+          <p>另需配送费{{shopInfo.rst.float_delivery_fee}}元</p>
+        </div>
       </div>
+      <van-button type="success">
+        <span v-if="isEmpty">￥{{shopInfo.rst.float_minimum_order_amount}}元起送</span>
+        <span v-else>去结算</span>
+      </van-button>
     </div>
-    <van-button type="success">
-      <span v-if="isEmpty">￥{{shopInfo.rst.float_minimum_order_amount}}元起送</span>
-      <span v-else>去结算</span>
-    </van-button>
   </div>
 </template>
 <script>
+import CartControll from "@/components/Shops/CartControll";
 export default{
   name:'ShopCar',
   components:{
+    CartControll
   },
   props:{
     shopInfo:Object
@@ -30,7 +50,8 @@ export default{
     return {
       totalCount:0,
       totalPrice:0,
-      selectFoods:[]
+      selectFoods:[],
+      showFoodList:false
     }
   },
   created(){
@@ -40,12 +61,29 @@ export default{
       this.totalCount = 0;
       this.totalPrice = 0;
       this.selectFoods = [];
+    },
+    showList(){
+      if(this.isEmpty)return;
+      this.showFoodList = !this.showFoodList;
+    },
+    clearFoods(){
+      this.shopInfo.recommend.forEach(res=>{
+        res.items.forEach(item=>{
+          item.count = 0;
+        })
+      });
+      this.shopInfo.menu.forEach(res=>{
+        res.foods.forEach(item=>{
+          item.count = 0;
+        })
+      });
+      this.showFoodList = false;
     }
   },
   computed:{
     isEmpty(){
       let empty = true;
-      this.initCount();
+      this.init();
       this.shopInfo.recommend.forEach(res=>{
         res.items.forEach(item=>{
           if(item.count){
@@ -79,11 +117,18 @@ export default{
   bottom: 0;
   left: 0;
   height: 50px;
-  background: rgba(61,61,61,0.9);
-  padding-left: 20px;
   z-index: 1000;
   justify-content: space-between;
   color: #fff;
+  .bottom{
+    width: 100%;
+    display: flex;
+    padding-left: 20px;
+    justify-content: space-between;
+    position: static;
+    z-index: 10;
+    background: rgba(61,61,61,0.9);
+  }
   .car{
     border:5px solid rgba(61,61,61,0.9);
     width:42px;
@@ -94,6 +139,7 @@ export default{
     text-align: center;
     line-height: 42px;
     font-size: 25px;
+    z-index: 100;
   }
   .p{
     display: flex;
@@ -108,7 +154,7 @@ export default{
       color: rgb(158, 154, 154);
     }
   }
-  &>button{
+  .bottom>button{
     height: 100%;
     border: 0;
     background: #07c160;
@@ -116,18 +162,69 @@ export default{
     font-size: 13px;
     font-weight: bold;
   }
+  .top{
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 50px;
+    background: white;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    .header{
+      background: rgb(223, 219, 219);
+      padding:15px 10px;
+      display: flex;
+      color: rgb(65, 62, 62);
+      font-size: 15px;
+      justify-content: space-between;
+      &>*:last-child{
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        i{
+          font-size: 15px;
+          margin-right: 1px;
+        }
+      }
+    }
+    .list{
+      padding: 20px 10px;
+      color: black;
+      display: flex;
+      font-size: 15px;
+      .title{
+        width:70%;
+      }
+      .price{
+        width:15%;
+        color: red;
+      }
+      .add{
+        width:15%;
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+  }
 }
 .isAddFood{
   .car{
     border:5px solid rgba(88, 86, 86, 0.5);
     background: rgba(61,61,61);
     color: rgb(143, 141, 141);
+    position: relative;
+    z-index: 10;
   }
   .p{
     color: rgb(158, 154, 154);
   }
   button{
-    background: none;
+    background: none!important;
   }
 }
+// .but{
+//   button{
+//     background: black!important;
+//   }
+// }
 </style>

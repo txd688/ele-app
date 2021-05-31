@@ -32,7 +32,7 @@ module.exports = {
     }
   },
    devServer: {
-    port: 8777,
+    port: 8111,
     proxy: {
       '/apis': {
         // target: 'https://c.iwanmen.com/element/',

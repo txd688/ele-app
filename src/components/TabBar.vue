@@ -26,6 +26,7 @@ export default{
   position:absolute;
   display: flex;
   width: 100%;
+  background:white;
   &>a{
     flex:1;
     display: flex;

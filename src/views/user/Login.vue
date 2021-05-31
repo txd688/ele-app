@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="login box-padding">
     <img src="@/assets/images/logo.jpg" alt=""/>
     <inputGroup 
       v-model="phone"
@@ -38,17 +38,21 @@ export default {
       verificatyCode:null,
       disabled:false,
       error:{},
+      whiteList:true,//免登陆
     };
   },
   methods: {
     getCode(){
+      if(this.whiteList){
+        this.phone = '17610351502';
+        this.verificatyCode = '156593';
+      }
       if(this.isPhone()){
-        this.codeDown();
         //发送请求
         this.$axios.post('/apis/api/posts/sms_send',{
-          // phone: '17610351502'
           phone:this.phone
         }).then((res)=>{
+          this.codeDown();
           console.log(res)
         });
       }
@@ -91,7 +95,6 @@ export default {
       //发送登录请求
       this.$axios.post("/apis/api/posts/sms_back",{
         phone: this.phone,
-        // phone: '17610351502',
         code: this.verificatyCode
       }).then(res=>{
         console.log(res);
@@ -129,6 +132,7 @@ export default {
   img{
     width: 200px;
     margin-top: 20%;
+    height: auto;
     margin-bottom: 40px;
   }
   .login-des{
