@@ -27,7 +27,7 @@
               <strong>{{item.name}}</strong>
               <span>{{item.description}}</span>
             </div>
-            <div class="foods flex-container" v-for="(food,i) in item.foods" :key="i">
+            <div class="foods flex-container" v-for="(food,i) in item.foods" :key="i" @click="handleFood(food)">
               <img :src="food.image_path" alt=""/>
               <section class="food-info overOmitLine">
                 <h4>{{food.name}}</h4>
@@ -44,17 +44,21 @@
       </div>
     </div>
     <ShopCar :shopInfo="shopInfo"/>
+    <!-- 商品详情 -->
+    <Food :food="selectFood" :isShow="showFood" @close="showFood=false"/>
   </div>
 </template>
 <script>
 import CartControll from "@/components/Shops/CartControll";
 import ShopCar from "./ShopCar";
 import BScroll from "better-scroll"
+import Food from "./Food.vue"
 export default{
   name:'Goods',
   components:{
     CartControll,
-    ShopCar
+    ShopCar,
+    Food
   },
   data(){
     return {
@@ -63,6 +67,8 @@ export default{
       foodScr:{},
       scrollY:0,//右侧菜单当前滚动到的y值
       listHeight:[],//12个区列表高度
+      selectFood:null,
+      showFood:false
     }
   },
   created(){
@@ -115,6 +121,10 @@ export default{
         height += item.clientHeight;
         this.listHeight.push(height);
       }
+    },
+    handleFood(food){
+      this.selectFood = food;
+      this.showFood = true;
     }
   },
   computed:{
@@ -139,6 +149,12 @@ export default{
 <style scoped lang="less">
 .goods{
   height: calc(100% - 60px);
+  #menuScroll,.main ul{
+    padding-bottom: 100px;
+  }
+  #menuScroll{
+    background: #f7f8fa;
+  }
   .recommmend{
     &>p{
       font-weight: bold;

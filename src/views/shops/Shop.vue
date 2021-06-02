@@ -17,7 +17,7 @@
       </div>
       <Activity :data="shopInfo.rst.activities"/>
       <div class="notice">公告：{{shopInfo.rst.promotion_info}}</div>
-      <van-sticky :offset-top="0">
+      <van-sticky :offset-top="0" zIndex="10">
         <van-tabs :active="activeName" @click="childPage">
           <van-tab title="点餐" name="goods"></van-tab>
           <van-tab title="评价" name="comments"></van-tab>
@@ -70,7 +70,7 @@ export default{
 <style scoped lang="less">
 .shop{
   overflow-x: scroll;
-  height: calc(100% - 50px);
+  height: 100%;
   background: white;
   .header{
     position: relative;
