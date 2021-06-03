@@ -97,8 +97,8 @@ export default {
         phone: this.phone,
         code: this.verificatyCode
       }).then(res=>{
-        console.log(res);
-        localStorage.setItem("ele_login",true);
+        // console.log(res);
+        localStorage.setItem("ele_login",res.data.user._id);
         this.$router.push("/");
       }).catch(err=>{
         this.error = {

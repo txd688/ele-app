@@ -75,6 +75,16 @@ const routes = [
       },   
     ]
   },
+  {
+    path: "/myAddress",
+    name: "myAddress",
+    component:()=>import("@/views/Order/MyAddress.vue")
+  },   
+  {
+    path: "/addAddress",
+    name: "addAddress",
+    component:()=>import("@/views/Order/AddAddress.vue")
+  },   
 ];
 const router = new VueRouter({
   mode: '',
