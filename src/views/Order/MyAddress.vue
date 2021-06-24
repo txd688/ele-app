@@ -1,6 +1,27 @@
 <template>
   <div class="MyAddress">
     <Header title="我的地址"/>
+    <div class="address-view">
+      <div class="card flex-container" v-for="(item,index) in allAddress" :key="index">
+        <div class="active">
+          123
+        </div>
+        <div class="main">
+          <div class="top">
+            <span>{{item.name}}</span>
+            <span class="sex" v-if="item.sex">{{item.sex}}</span>
+            <span>{{item.phone}}</span>
+          </div>
+          <div class="cardAddress">
+            <span class="tag" v-if="item.tag">{{item.tag}}</span>
+            <span>{{item.address}}</span>
+          </div>
+        </div>
+        <div class="right">
+          123
+        </div>
+      </div>
+    </div>
     <div @click="addAddress" class="address">
       <van-icon name="add" />新增收货地址
     </div>
@@ -13,9 +34,34 @@ export default{
   components:{
     Header
   },
+  data(){
+    return {
+      allAddress:[]
+    }
+  },
+  created(){
+    this.getData();
+  },
+  beforeRouteEnter(to,from,next){
+    next(vm=>vm.getData())
+  },
   methods:{
     addAddress(){
       this.$router.push("/addAddress")
+    },
+    getData(){
+      this.$axios(`apis/api/user/user_info/${localStorage.ele_login}`).then(res=>{
+        console.log(res)
+        this.allAddress = res.data.myAddress;
+      })
+    },
+    handEdit(address){
+      this.$router.push({
+        name:'addAddress',
+        params:{
+          addressInfo:address
+        }
+      })
     }
   }
 }
@@ -23,6 +69,50 @@ export default{
 
 <style scoped lang='less'>
 .MyAddress{
+  .address-view{
+    .card{
+      padding: 15px 15px 30px 15px;
+      border-bottom: 1px solid #ccc;
+      .active{
+        width:40px;
+      }
+      .main{
+        color: #666;
+        flex:1;
+        .top{
+          font-size: 16px;
+          span{
+            margin-right: 5px;
+            line-height: 25px;
+          }
+          &>span:first-child{
+            color: black;
+            font-weight: bold;
+          }
+        }
+        .cardAddress{
+          display: flex;
+          align-items: center;
+          .tag{
+            border: 1px solid rgb(223, 153, 48);;
+            color: rgb(223, 153, 48);
+            width:38px;
+            display:inline-block; 
+            text-align: center;
+            white-space:nowrap;
+            margin-right: 4px;
+            line-height: 18px;
+          }
+          &>span:last-child{
+            line-height: 18px;
+          }
+        }
+      }
+      .right{
+        width: 50px;
+      }
+    }
+  }
   .address{
     background-color: white;
     padding: 15px 25px;

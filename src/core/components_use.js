@@ -57,7 +57,7 @@
    Sidebar, 
    SidebarItem,
    Sticky,
-   Badge 
+   Badge,
  } from 'vant'
  Vue.use(Badge)
  Vue.use(Sticky)
