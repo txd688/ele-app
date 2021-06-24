@@ -7,7 +7,7 @@
           <img :src="item.image_path" alt=""/>
           <div class="food">
             <p class="overOmitLine">{{item.name}}</p>
-            <p>月售{{item.month_sales}} 好评率{{item.satify_rate}}</p>
+            <p>月售{{item.month_sales}} 好评率{{item.satisfy_rate}}%</p>
           </div>
           <div class="price flex-container">
             <p>￥{{item.activity.fixed_price}}</p>
@@ -32,7 +32,7 @@
               <section class="food-info overOmitLine">
                 <h4>{{food.name}}</h4>
                 <p class="overOmitLine">{{food.description}}</p>
-                <p>月售{{food.month_sales}}份 好评率{{food.satisfy_rate}}</p>
+                <p>月售{{food.month_sales}}份 好评率{{food.satisfy_rate}}%</p>
                 <div class="price flex-container">
                   <span>￥{{food.activity.fixed_price}}</span>
                   <CartControll :foods="food"/>

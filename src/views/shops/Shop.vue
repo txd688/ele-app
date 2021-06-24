@@ -4,7 +4,7 @@
       <div class="nav_bg">
         <img :src="shopInfo.rst.scheme" alt=""/>
       </div>
-      <van-icon name="arrow-left" class="arrow-left"/>
+      <van-icon name="arrow-left" class="arrow-left" @click="$router.push('/home')" style="z-index:5"/>
       <div class="shop_img">
         <img :src="shopInfo.rst.image_path" alt="" />
       </div>
