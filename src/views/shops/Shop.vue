@@ -24,8 +24,10 @@
           <van-tab title="商家" name="seller"></van-tab>
         </van-tabs>
       </van-sticky>
-      <router-view/>
-   
+      <keep-alive>
+        <router-view/>
+      </keep-alive>
+      
     <!-- 弹窗 -->
     <InfoModal :data="shopInfo.rst" :showModal="showModal" @hideModal="hideModal"/>
   </div>

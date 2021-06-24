@@ -1,6 +1,7 @@
 <template>
   <div class="MyAddress">
     <Header title="我的地址"/>
+
     <div class="address-view">
       <div class="card flex-container" v-for="(item,index) in allAddress" :key="index">
         <div class="active">
@@ -18,10 +19,12 @@
           </div>
         </div>
         <div class="right">
-          123
+          <van-icon name="edit" @click="handleEdit(item)"/>
+          <van-icon name="cross" @click="handleDel(item,index)"/>
         </div>
       </div>
     </div>
+
     <div @click="addAddress" class="address">
       <van-icon name="add" />新增收货地址
     </div>
@@ -47,7 +50,20 @@ export default{
   },
   methods:{
     addAddress(){
-      this.$router.push("/addAddress")
+      this.$router.push({
+        name:"addAddress",
+        params:{
+          title:"添加地址",
+          addressInfo:{
+            name:'',
+            bottom:'',
+            address:'',
+            sex:'',
+            tag:'',
+            phone:''
+          }
+        }
+      });
     },
     getData(){
       this.$axios(`apis/api/user/user_info/${localStorage.ele_login}`).then(res=>{
@@ -55,13 +71,19 @@ export default{
         this.allAddress = res.data.myAddress;
       })
     },
-    handEdit(address){
+    handleEdit(address){
       this.$router.push({
         name:'addAddress',
         params:{
+          title:'编辑地址',
           addressInfo:address
         }
       })
+    },
+    handleDel(address,index){
+      this.$axios.delete(`apis/api/user/address/${localStorage.ele_login}/${address._id}`).then(()=>{
+        this.allAddress.splice(index,1)
+      });
     }
   }
 }
@@ -110,6 +132,14 @@ export default{
       }
       .right{
         width: 50px;
+        display:flex;
+        justify-content:space-around;
+        align-items:center;
+        color:#666;
+        i{
+          font-size:20px;
+         
+        }
       }
     }
   }

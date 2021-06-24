@@ -56,7 +56,20 @@ export default{
       if(this.userInfo.myAddress.length>0){
         this.$router.push("/myAddress");
       }else{
-        this.$router.push("/addAddress");
+        this.$router.push({
+          name:"addAddress",
+          params:{
+            title:"添加地址",
+            addressInfo:{
+              name:'',
+              bottom:'',
+              address:'',
+              sex:'',
+              tag:'',
+              phone:''
+            }
+          }
+        });
       }
     }
   }
