@@ -40,7 +40,7 @@
       <ul class="comment-warp">
         <li v-for="(item,index) in data.comments" :key="index" class="flex-container">
           <div class="userImg">
-            <img :src="item.avatar" alt=""/>
+            <img :src="item.avatar ?item.avatar:headLogo" alt=""/>
           </div>
           <div class="commentsInfo">
             <div class="name flex-container">
@@ -79,7 +79,8 @@ export default{
   data(){
     return {
       data:null,
-      value:''
+      value:'',
+      headLogo:require("@/assets/images/head.png")
     }
   },
   created(){
@@ -151,8 +152,14 @@ export default{
   .userImg{
     width: 40px;
     height: 40px;
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
     img{
-      border-radius: 50%;
+      width: 40px;
+      position:absolute;
+      top: 0;
+      height: auto;
     }
   }
   .commentsInfo{

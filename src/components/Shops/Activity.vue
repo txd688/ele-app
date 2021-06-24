@@ -8,8 +8,8 @@
       <span @click="showSheet=true">{{ data.length }}个优惠<van-icon name="play" /></span>
     </div>
     <!-- 优惠弹窗 -->
-    <transition name="van-slide-up">
-      <div class="act-model" v-show="showSheet">
+    <transition name="van-slide-up" >
+      <div class="act-model" v-show="showSheet" style="z-index:100">
         <div class="title">优惠活动</div>
         <ul>
           <li v-for="(item,index) in data" :key="index">

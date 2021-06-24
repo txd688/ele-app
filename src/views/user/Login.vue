@@ -45,7 +45,7 @@ export default {
     getCode(){
       if(this.whiteList){
         this.phone = '17610351502';
-        this.verificatyCode = '156593';
+        this.verificatyCode = '715025';
       }
       if(this.isPhone()){
         //发送请求
