@@ -3,9 +3,9 @@
     <Header title="我的地址"/>
 
     <div class="address-view">
-      <div class="card flex-container" v-for="(item,index) in allAddress" :key="index">
+      <div class="card flex-container" v-for="(item,index) in allAddress" :key="index" @click="setAddressInfo(item,index)">
         <div class="active">
-          123
+          <van-icon name="checked" v-if="selectIndex ==index"/>
         </div>
         <div class="main">
           <div class="top">
@@ -39,7 +39,8 @@ export default{
   },
   data(){
     return {
-      allAddress:[]
+      allAddress:[],
+      selectIndex:0,
     }
   },
   created(){
@@ -84,6 +85,11 @@ export default{
       this.$axios.delete(`apis/api/user/address/${localStorage.ele_login}/${address._id}`).then(()=>{
         this.allAddress.splice(index,1)
       });
+    },
+    setAddressInfo(address,index){
+      this.selectIndex = index;
+      this.$store.dispatch("setUserInfo",address)
+      this.$router.push("/settlement");
     }
   }
 }
@@ -97,10 +103,17 @@ export default{
       border-bottom: 1px solid #ccc;
       .active{
         width:40px;
+        display: flex;
+        align-items: center;
+        i{
+          font-size: 20px;
+          color: #4fc08d;
+        }
       }
       .main{
         color: #666;
         flex:1;
+        padding-right:20px;
         .top{
           font-size: 16px;
           span{
@@ -115,6 +128,7 @@ export default{
         .cardAddress{
           display: flex;
           align-items: center;
+          font-size: 14px;
           .tag{
             border: 1px solid rgb(223, 153, 48);;
             color: rgb(223, 153, 48);

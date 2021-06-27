@@ -24,6 +24,7 @@
           <van-tab title="商家" name="seller"></van-tab>
         </van-tabs>
       </van-sticky>
+      
       <keep-alive>
         <router-view/>
       </keep-alive>
