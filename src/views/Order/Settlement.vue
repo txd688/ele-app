@@ -25,14 +25,28 @@
       <CartGroup :orderInfo="orderInfo" :totalPrice="totalPrice"/>
 
       <div style="margin:8px;">
-        <van-cell title="餐具份数" is-link value="未选择" @click="show=true"/>
-        <van-cell title="订单备注" is-link value="口味、偏好" />
+        <van-cell title="餐具份数" is-link :value="tablewareNum || '未选择'" @click="show=true"/>
+        <van-cell title="订单备注" is-link  @click="$router.push('/remark')">
+          <template #default>
+            <span class="overOmitLine" style="display:block;">{{remark || '口味、偏好'}}</span>
+          </template>
+        </van-cell>
         <van-cell title="发票信息" is-link value="不需要发票" />
       </div>
     </div>
-    <van-popup v-model:show="show" position="bottom" :style="{ height: '30%' }">
-      <van-picker title="标题" :columns="columns" :default-index="2" confirm-button-text="1123">
-123
+    <div class="footer">
+      <span>￥{{totalPrice}}</span>
+      <span @click="handklePay">去支付</span>
+    </div>
+
+    <van-popup v-model:show="show" position="bottom" :style="{ height: '40%' }">
+      <!-- picker不知道为什么确定和取消按钮不见了，手动添加 -->
+      <div class="pickerTop">
+        <span @click="hideProp">取消</span>
+        <span>—— 餐具分数 ——</span>
+        <span @click="ok()">确定</span>
+      </div>
+      <van-picker title="标题" :columns="columns"  ref="tableware">
       </van-picker>
     </van-popup>
   </div>
@@ -51,29 +65,35 @@ export default{
   data(){
     return {
       haveAddress:false,
-      show:true,
-      columns:['杭州', '宁波', '温州', '绍兴', '湖州', '嘉兴', '金华']
+      show:false,
+      columns:['1', '2', '3', '4', '5', '6', '7','8','9'],
+      tablewareNum:'',
+      remark:''
     }
   },
   created(){
-
+    
   },
   beforeRouteEnter(to,from,next){
     next(vm=>{
       if(!vm.userInfo){
         vm.getData();
       }
+      vm.remark = vm.$store.getters.remarkInfo.remark;
+      vm.tablewareNum = vm.$store.getters.remarkInfo.tableware;
     });
   },
   methods:{
-    onConfirm(){
-
+    ok(){
+      this.tablewareNum = this.$refs.tableware.getValues() + '份餐具';
+      this.$store.dispatch("setRemarkInfo",{
+        tableware:this.tablewareNum,
+        remark:this.$store.getters.remarkInfo.remark
+      });
+      this.hideProp();
     },
-    onCancel(){
-
-    },
-    onChange(){
-
+    hideProp(){
+      this.show = false;
     },
     addAddress(){
       this.$router.push({
@@ -100,6 +120,13 @@ export default{
           this.haveAddress = false;
         }
       });
+    },
+    handklePay(){
+      if(!this.userInfo){
+        this.$toast('请选择送货地址');
+        return;
+      }
+      this.$router.push("/pay");
     }
   },
   computed:{
@@ -119,7 +146,7 @@ export default{
 <style scoped lang='less'>
 .settlement{
   .content{
-    background: linear-gradient(#1989fa 100px, #fff 100%);
+    background: linear-gradient(#1989fa 50px, #fff 100%);
     .order_info{
       color: rgba(243, 243, 243);
       padding: 12px 0 60px 18px;
@@ -151,6 +178,43 @@ export default{
         margin-left: 10px;
         padding: 0 1px;
       }
+    }
+  }
+  .pickerTop{
+    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    position: relative;
+    padding-bottom: 2px;
+    align-items: flex-end;
+    &>span:first-child,&>span:last-child{
+      font-size: 14px;
+    }
+    &>span:first-child{
+      color: #969799;
+    }
+    &>span:last-child{
+      color: #576b95;
+    }
+  }
+  .footer{
+    position: absolute;
+    bottom: 0;
+    background: #5c5d5e;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+    font-size: 18px;
+    &>span:first-child{
+      margin-left: 10px;
+    }
+    &>span:last-child{
+      background: #2bd67e;
+      padding: 15px 30px;
     }
   }
 }

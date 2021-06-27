@@ -7,20 +7,26 @@ const types = {
     SET_LOCATION: "SET_LOCATION",
     SET_ADDRESS: "SET_ADDRESS",
     ORDER_INFO: "ORDER_INFO",
-    USER_INFO:"USER_INFO"
+    USER_INFO:"USER_INFO",
+    REMARK_INFO:"REMARK_INFO"
 }
 const state = {
   location: {},
   address: "",
   orderInfo:null,
   LOADING: false,
-  userInfo:null
+  userInfo:null,
+  remarkInfo:{
+    tableware:'',
+    remark:''
+  }
 };
 const getters = {
   location: state => state.location,
   address: state => state.address,
   orderInfo:state=>state.orderInfo,
   userInfo:state=>state.userInfo,
+  remarkInfo:state=>state.remarkInfo,
   loading: state => state.LOADING,
   totalPrice:state=>{
     let price = 0;
@@ -32,7 +38,8 @@ const getters = {
       price += state.orderInfo.shopInfo.float_delivery_fee;
     }
     return price;
-  }
+  },
+
 }
 const mutations = {
   [types.SET_LOCATION](state, location){
@@ -63,6 +70,13 @@ const mutations = {
       state.userInfo = null;
     }
   },
+  [types.REMARK_INFO](state, remarkInfo){
+    if(remarkInfo){
+      state.remarkInfo = remarkInfo;
+    }else{
+      state.remarkInfo = null;
+    }
+  },
   showLoading(state){
     state.LOADING = true    
   },
@@ -82,6 +96,9 @@ const actions = {
   },
   setUserInfo:({commit},userInfo)=>{
     commit(types.USER_INFO, userInfo)
+  },
+  setRemarkInfo:({commit},remarkInfo)=>{
+    commit(types.REMARK_INFO, remarkInfo)
   }
 }
 export default new Vuex.Store({
@@ -89,5 +106,4 @@ export default new Vuex.Store({
   getters,
   mutations,
   actions
-  
 })

@@ -90,6 +90,16 @@ const routes = [
     name: "settlement",
     component:()=>import("@/views/Order/Settlement.vue")
   },  
+  {
+    path: "/remark",
+    name: "remark",
+    component:()=>import("@/views/Order/Remark.vue")
+  },  
+  {
+    path: "/pay",
+    name: "pay",
+    component:()=>import("@/views/Order/Pay.vue")
+  }, 
 ];
 const router = new VueRouter({
   mode: '',
