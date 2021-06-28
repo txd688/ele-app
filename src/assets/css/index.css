@@ -66,6 +66,14 @@ img{
   height: 100%;
   object-fit: cover;
 }
+button,
+input,
+textarea {
+  outline: none;
+  border: none;
+  background: none;
+}
+
 /* 单行超出出现省略号 */
 .overOmitLine{
 	overflow: hidden;

@@ -4,7 +4,7 @@
     <div class="main">
       <div class="box" v-if="orderInfo">
         <p>支付剩余时间</p>
-        <p class="time">000</p>
+        <p class="time">{{countdown}}</p>
         <van-divider />
         <div class="shopInfo">
           <div class="overOmitLine">{{orderInfo.shopInfo.name}}</div>
@@ -20,7 +20,7 @@
         <van-icon name="checked" />
       </div>
       <div class="button">
-        <van-button type="success">成功按钮</van-button>
+        <van-button type="success" :disabled="outTime" @click="pay">确定支付</van-button>
       </div>
     </div>
   </div>
@@ -34,8 +34,20 @@ export default {
   },
   data(){
     return{
-
+      countdown:'00:15:00',
+      timer:null,
+      outTime:false
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm=>{
+      vm.countTimeDown();
+      vm.addOrder();
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    window.clearInterval(this.timer);
+    next();
   },
   computed:{
     userInfo(){
@@ -46,8 +58,88 @@ export default {
     },
     totalPrice(){
       return this.$store.getters.totalPrice;
+    },
+    remarkInfo() {
+      return this.$store.getters.remarkInfo;
     }
-  }
+  },
+  methods: {
+    countTimeDown(){
+      let minute = 14;
+      let second = 59;
+      this.countdown = '00:'+minute+':'+second;
+      this.timer = setInterval(() => {
+        second--;
+        if(second == '00' && minute == '00'){
+          this.countdown = '订单已超时';
+          this.outTime = true;
+          window.clearInterval(this.timer);
+          return;
+        }
+        if(second == '00'){
+          second = 59;
+          minute--;
+          minute = minute < 10 ? '0' + minute : minute;
+        }
+        second = second < 10 ? '0' + second : second;
+        this.countdown = '00:'+minute+':'+second;
+      }, 1000);
+    },
+    pay() {
+      // const data = {
+      //   body: "米修在线",
+      //   out_trade_no: new Date().getTime().toString(),
+      //   total_fee: 1000
+      // };
+      // // alert("进入到pay方法中");
+      // // 请求 http://www.thenewstep.cn/wxzf/example/jsapi.php
+      // fetch("https://www.thenewstep.cn/wxzf/example/jsapi.php", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-type": "application/json"
+      //   },
+      //   body: JSON.stringify(data)
+      // })
+      //   .then(res => res.json())
+      //   .then(data => {
+      //     this.onBridgeReady(data);
+      //   })
+      //   .catch(err => {
+      //     alert(err);
+      //     // this.addOrder();
+      //   });
+      this.addOrder();
+    },
+    // onBridgeReady(data) {
+    //   WeixinJSBridge.invoke("getBrandWCPayRequest", data, res => {
+    //     if (res.err_msg == "get_brand_wcpay_request:ok") {
+    //       // 使用以上方式判断前端返回,微信团队郑重提示：
+    //       //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+    //       // alert("支付成功");
+    //       // 生成订单
+    //       this.addOrder();
+    //     }
+    //   });
+    // },
+    addOrder(){
+      let orderlist = {
+        orderInfo: this.orderInfo,
+        userInfo: this.userInfo,
+        totalPrice: this.totalPrice,
+        remarkInfo: this.remarkInfo,
+        image_path: this.orderInfo.shopInfo.image_path,
+        shopInfoName: this.orderInfo.shopInfo.name,
+        selectFoodsName: this.orderInfo.selectFoods[0].name
+      };
+      // console.log(orderlist)
+      // alert(JSON.stringify(orderlist));
+      this.$axios
+        .post(`/apis/api/user/add_order/${localStorage.ele_login}`, orderlist)
+        .then(() => {
+          this.$router.push("/order");
+        });
+    }
+  },
 }
 </script>
 <style lang="less" scoped>

@@ -100,6 +100,11 @@ const routes = [
     name: "pay",
     component:()=>import("@/views/Order/Pay.vue")
   }, 
+  {
+    path: "/orderInfo",
+    name: "orderInfo",
+    component:()=>import("@/views/Order/OrderInfo.vue")
+  }, 
 ];
 const router = new VueRouter({
   mode: '',
