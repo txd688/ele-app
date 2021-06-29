@@ -125,7 +125,7 @@ export default{
   bottom: 0;
   left: 0;
   height: 50px;
-  z-index: 1000;
+  z-index: 10;
   justify-content: space-between;
   color: #fff;
   .bottom{

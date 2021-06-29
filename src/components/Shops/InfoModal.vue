@@ -1,7 +1,7 @@
 <template>
   <transition name="van-fade">
     <div class="shopInfo" v-show="showModal">
-      <van-overlay :show="show" @click="show = false">
+      <van-overlay :show="show" @click="show = false" z-index="100">
         <div class="flex-container wrapper" @click.stop>
           <div class="block">
             <div class="title flex-container">

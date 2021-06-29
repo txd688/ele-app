@@ -42,7 +42,6 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm=>{
       vm.countTimeDown();
-      vm.addOrder();
     })
   },
   beforeRouteLeave (to, from, next) {

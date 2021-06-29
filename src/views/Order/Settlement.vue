@@ -145,7 +145,10 @@ export default{
 
 <style scoped lang='less'>
 .settlement{
+  height: calc(100% - 48px);
+  overflow-x: scroll;
   .content{
+    padding-bottom: 10px;
     background: linear-gradient(#1989fa 50px, #fff 100%);
     .order_info{
       color: rgba(243, 243, 243);
